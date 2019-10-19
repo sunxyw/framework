@@ -34,6 +34,7 @@ class Core
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
                 header('HTTP/1.1 404 Not Found');
+                echo 'we\'re sorry about that.';
                 break;
             case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
