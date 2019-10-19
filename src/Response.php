@@ -36,14 +36,31 @@ class Response
         $this->output();
     }
 
+    public function image($img)
+    {
+        $img = file_get_contents($img);
+        $this->header('Content-Type: image/jpeg');
+        $this->write($img);
+        $this->output();
+    }
+
+    public function redirect($to)
+    {
+        $this->header('Location: ' . $to);
+        $this->write('Redirecting...');
+        $this->output();
+    }
+
     public function write($content)
     {
         $this->content .= $content;
+        return $this;
     }
 
     public function header($header)
     {
         $this->headers[] = $header;
+        return $this;
     }
 
     public function output()
