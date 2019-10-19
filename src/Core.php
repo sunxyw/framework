@@ -44,14 +44,20 @@ class Core
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 if (is_callable($handler)) {
-                    $handler();
+                    $content = $handler();
                 }
                 if (is_string($handler) && Str::contains($handler, '@')) {
                     $target = explode('@', $handler);
                     $controller = $target[0];
                     $method = $target[1];
                     $controller = new $controller;
-                    $controller->$method();
+                    $content = $controller->$method();
+                }
+                if ($content === 7031) {
+                    break;
+                }
+                if (is_array($content)) {
+                    return Response::getInstance()->json($content);
                 }
                 break;
         }
