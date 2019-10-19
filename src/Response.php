@@ -5,6 +5,8 @@ namespace Framework;
 class Response
 {
     private static $_instance = null;
+    protected $content = '';
+    protected $headers = [];
 
     private function __construct()
     {
@@ -29,11 +31,27 @@ class Response
             $data['message'] = 'OK';
         }
 
-        return $this->write(json_encode($data));
+        $this->header('Content-type: application/json');
+        $this->write(json_encode($data));
+        $this->output();
     }
 
     public function write($content)
     {
-        echo $content;
+        $this->content .= $content;
+    }
+
+    public function header($header)
+    {
+        $this->headers[] = $header;
+    }
+
+    public function output()
+    {
+        foreach ($this->headers as $header) {
+            header($header);
+        }
+
+        echo $this->content;
     }
 }
