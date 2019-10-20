@@ -40,7 +40,7 @@ class Core
             case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 header('HTTP/1.1 405 Method Not Allowed');
-                echo '抱歉，请使用 [' . $allowedMethods . '] 方法进行访问';
+                echo '抱歉，请使用 [' . implode(', ', $allowedMethods) . '] 方法进行访问';
                 break;
             case \FastRoute\Dispatcher::FOUND:
                 $handler = $routeInfo[1];
