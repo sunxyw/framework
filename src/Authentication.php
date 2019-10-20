@@ -7,8 +7,8 @@ use LeanCloud\User;
 
 class Authentication
 {
-    static public $email_regex = '^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$';
-    static public $phone_regex = '^([1][3,4,5,6,7,8,9])\d{9}$';
+    static public $email_regex = '/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/';
+    static public $phone_regex = '/^([1][3,4,5,6,7,8,9])\d{9}$/';
     protected static $className = '_User';
 
     static public function register($username, $password, $data = [])
@@ -36,12 +36,8 @@ class Authentication
 
     static public function sendSmsCode($phone)
     {
-        try {
-            SMS::requestSmsCode($phone);
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
+        SMS::requestSmsCode($phone);
+        return true;
     }
 
     static public function authByPhone($phone, $sms_code)
@@ -51,11 +47,7 @@ class Authentication
 
     static public function sendResetEmail($email)
     {
-        try {
-            User::requestPasswordReset($email);
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
+        User::requestPasswordReset($email);
+        return true;
     }
 }
