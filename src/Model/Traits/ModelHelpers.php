@@ -6,16 +6,23 @@ trait ModelHelpers
 {
     static public function all($array = false)
     {
-        $projects = (new self())->getQuery()->find();
+        $results = (new self())->getQuery()->find();
 
         if ($array) {
             $data = [];
-            foreach ($projects as $project) {
-                $data[] = $project->toJson();
+            foreach ($results as $result) {
+                $data[] = $result->toJson();
             }
-            $projects = $data;
+            $results = $data;
         }
 
-        return $projects;
+        return $results;
+    }
+
+    static public function find($id)
+    {
+        $result = (new self())->getQuery()->get($id);
+
+        return $result;
     }
 }
