@@ -25,9 +25,9 @@ class Authentication
 
     static public function login($username, $password)
     {
-        if (preg_match(self::email_regex, $username)) {
+        if (preg_match(self::$email_regex, $username)) {
             return User::logInWithEmail($username, $password);
-        } elseif (preg_match(self::phone_regex, $username)) {
+        } elseif (preg_match(self::$phone_regex, $username)) {
             return User::logInWithMobilePhoneNumber($username, $password);
         } else {
             return User::logIn($username, $password);
