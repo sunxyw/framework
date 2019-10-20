@@ -18,22 +18,22 @@ class Router
 
     public function post($uri, $handler)
     {
-        $this->map(['post'], $uri, $handler);
+        $this->map(['POST'], $uri, $handler);
     }
 
     public function put($uri, $handler)
     {
-        $this->map(['put'], $uri, $handler);
+        $this->map(['PUT'], $uri, $handler);
     }
 
     public function patch($uri, $handler)
     {
-        $this->map(['patch'], $uri, $handler);
+        $this->map(['PATCH'], $uri, $handler);
     }
 
     public function delete($uri, $handler)
     {
-        $this->map(['delete'], $uri, $handler);
+        $this->map(['DELETE'], $uri, $handler);
     }
 
     public function build()
