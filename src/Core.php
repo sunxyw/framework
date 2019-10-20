@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Exception;
 use Illuminate\Support\Str;
 
 class Core
@@ -34,25 +35,34 @@ class Core
         switch ($routeInfo[0]) {
             case \FastRoute\Dispatcher::NOT_FOUND:
                 header('HTTP/1.1 404 Not Found');
-                echo 'we\'re sorry about that.';
+                echo '抱歉，页面不存在';
                 break;
             case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 header('HTTP/1.1 405 Method Not Allowed');
-                echo 'we\'re sorry about that.';
+                echo '抱歉，请使用 [' . $allowedMethods . '] 方法进行访问';
                 break;
             case \FastRoute\Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
-                if (is_callable($handler)) {
-                    $content = $handler();
-                }
-                if (is_string($handler) && Str::contains($handler, '@')) {
-                    $target = explode('@', $handler);
-                    $controller = $target[0];
-                    $method = $target[1];
-                    $controller = new $controller;
-                    $content = $controller->$method();
+                try {
+                    if (is_callable($handler)) {
+                        $content = $handler($vars);
+                    }
+                    if (is_string($handler) && Str::contains($handler, '@')) {
+                        $target = explode('@', $handler);
+                        $controller = $target[0];
+                        $method = $target[1];
+                        $controller = new $controller;
+                        $content = $controller->$method($vars);
+                    }
+                } catch (Exception $e) {
+                    $content = Response::getInstance()->header('HTTP/1.1 500 Internal Server Error')
+                        ->json([
+                            'code' => 500,
+                            'error_code' => $e->getCode(),
+                            'message' => $e->getMessage(),
+                        ]);
                 }
                 if ($content === 7031) {
                     break;
